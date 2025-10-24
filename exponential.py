@@ -1,6 +1,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
 #Crea la proyección polar
+def graficar(grados,r):
+    fig = plt.figure(figsize=(6, 6))
+    ax = fig.add_subplot(111, polar=True)
+    ax.plot([0, grados], [0, r], color='red', linestyle='-', label='Número Complejo', marker=('*'))
+    texto_coordenadas = f'({r:.1f}, {np.degrees(grados):.0f}°)'
+    ax.annotate(texto_coordenadas, 
+                xy=(grados, r), 
+                xytext=(grados, r + 1), # Offset text slightly above the point
+                arrowprops=dict(facecolor='black', shrink=0.03, width=0.4),
+                ha='center', va='bottom')
+    ax.set_title("Resulado: Número Complejo", va='bottom')
+    ax.set_xlabel("Parte Real")
+    ax.set_ylabel("Parte Imaginaria")
+    ax.yaxis.set_label_coords(-0.1, 0.5)
+    ax.legend()
+    plt.grid(True)
+    plt.show()
+
 
 print("INTRODUCIR SOLO VALORES DECIMALES")
 print("NUMERO COMPLEJO 1")
@@ -41,11 +60,17 @@ match opc:
         #regresar el numero a forma polar para graficar
         r = np.sqrt(a**2+b**2)
         grados = np.arctan(b/a)
-        colors=grados
-        fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
-        sc=ax.scatter(grados, r, s=20, c=colors, cmap='hsv')
-        plt.show()
+        print(grados)
+        graficar(grados,r)
     case _:
         print("Opcion inválida.")
 print("Vuelva pronto!")
 
+'''
+colors=grados
+        fig, ax = plt.subplots(subplot_kw=dict(projection='polar'))
+        sc=ax.scatter(grados, r, s=20, c=colors, cmap='hsv')
+        plt.show()
+        plt.show()
+
+'''
