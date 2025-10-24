@@ -15,6 +15,8 @@ from fractions import Fraction
 # Binómica --> Polar
 def bin_pol(a,b,tipo=0):
     r = math.sqrt(a**2+b**2)
+    if a == 0:
+        return r,0
     if tipo == 0:
         g = math.degrees(math.atan(b/a))
         if a < 0 and b > 0:  # 2do cuadrante
@@ -30,7 +32,7 @@ def bin_pol(a,b,tipo=0):
 
 # Polar --> Exponencial
 def pol_exp(r,g):
-    t = math.radians(b)/math.pi
+    t = math.radians(g)/math.pi
     return r,t
 
 
@@ -49,9 +51,27 @@ def pol_bin(r,g):
     b = r*math.sin(math.radians(g))
     return a,b
 
-# prueba detectar cuadrantes
 # DEMO
+# binómica --> polar
 print(bin_pol(3,4))
 print(bin_pol(-3,4))
 print(bin_pol(-3,-4))
 print(bin_pol(3,-4))
+
+# polar --> binómica
+print(pol_bin(5,53.13010235415598))
+print(pol_bin(5, 126.86989764584402))
+print(pol_bin(5, 233.13010235415598))
+print(pol_bin(5, 306.86989764584405))
+
+# polar --> exponencial
+print(pol_exp(3,45))
+print(pol_exp(3,135))
+print(pol_exp(3,225))
+print(pol_exp(3,315))
+
+# exponencial --> polar
+print(exp_pol(3, 0.25))
+print(exp_pol(3, 0.75))
+print(exp_pol(3, 1.25))
+print(exp_pol(3, 1.75))
