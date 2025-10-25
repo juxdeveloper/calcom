@@ -1,0 +1,52 @@
+# Calculadora (main)
+import complexconv
+import complexinput
+import complexoperations
+
+z1 = input("Ingresa el 1er número complejo:\n")
+z2 = input("Ingresa el 2do número complejo:\n")
+
+def detectar(z,n):
+    print("z" + str(n) + " es ", end="")
+    match complexinput.tipo(z):
+        case 1:
+            print("BINÓMICA")
+        case 2:
+            print("POLAR")
+        case 3:
+            print("EXPONENCIAL")
+detectar(z1,1)
+detectar(z2,2)
+
+print("====================================")
+print("     OPERACIÓN A REALIZAR")
+print("====================================")
+print("1. Suma")
+print("2. Resta")
+print("3. Multiplicación")
+print("4. División")
+print("5. Potencia  n-ésima")
+print("6. Raíz      n-ésima")
+print("====================================")
+op = input()
+while op.isdigit() == False and int(op) < i and int(op) > 6:
+    print("Opción inválida, ingrese una opción [1-6]")
+    op = input()
+op = int(op)
+
+
+match op:
+    case 1:
+        print(complexoperations.adicion(z1,z2,0))
+    case 2:
+        print(complexoperations.adicion(z1,z2,1))
+    case 3:
+        print(complexoperations.factor(z1,z2,0))
+    case 4:
+        print(complexoperations.factor(z1,z2,1))
+    case 5:
+        print(complexoperations.potencia(z1,2,0))
+    case 6:
+        print(complexoperations.potencia(z1,2,1))
+    case _:
+        print("pendejo")
