@@ -18,6 +18,7 @@ def detectar(z,n):
 detectar(z1,1)
 detectar(z2,2)
 
+'''
 print("====================================")
 print("     OPERACIÓN A REALIZAR")
 print("====================================")
@@ -28,12 +29,13 @@ print("4. División")
 print("5. Potencia  n-ésima")
 print("6. Raíz      n-ésima")
 print("====================================")
-op = input()
-while op.isdigit() == False and int(op) < i and int(op) > 6:
-    print("Opción inválida, ingrese una opción [1-6]")
-    op = input()
-op = int(op)
-
+'''
+#op = input()
+#while op.isdigit() == False and int(op) < i and int(op) > 6:
+ #   print("Opción inválida, ingrese una opción [1-6]")
+  #  op = input()
+#op = int(op)
+op = 90
 
 match op:
     case 1:
@@ -48,5 +50,17 @@ match op:
         print(complexoperations.potencia(z1,2,0))
     case 6:
         print(complexoperations.potencia(z1,2,1))
-    case _:
-        print("pendejo")
+
+# === Tests ===
+print("suma (+)::   ", end="")
+print(complexoperations.adicion(z1,z2,0))
+print("resta (-)::   ", end="")
+print(complexoperations.adicion(z1,z2,1))
+print("multiplicación (*)::   ", end="")
+print(complexoperations.factor(z1,z2,0))
+print("división (/)::   ", end="")
+print(complexoperations.factor(z1,z2,1))
+print("potencia (**)::   ", end="")
+print(complexoperations.potencia(z1,2,0))
+print("raiz (**1/n)::   ", end="")
+print(complexoperations.potencia(z1,2,1))
