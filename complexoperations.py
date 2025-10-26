@@ -9,8 +9,8 @@ def adicion(z1,z2,operacion=0):
         z1 = complexinput.ingresar(z1,2)
         z1 = complexconv.pol_bin(z1[0],z1[1])
     elif complexinput.tipo(z1) == 3:
-        z1 = complexinput.ingresar(z1,2)
-        z1 = complexconv.pol_bin(z1[0],z1[1])
+        z1 = complexinput.ingresar(z1,3)
+        z1 = complexconv.exp_bin(z1[0],z1[1])
 
     if complexinput.tipo(z2) == 1:
         z2 = complexinput.ingresar(z2,1)
@@ -18,8 +18,8 @@ def adicion(z1,z2,operacion=0):
         z2 = complexinput.ingresar(z2,2)
         z2 = complexconv.pol_bin(z2[0],z2[1])
     elif complexinput.tipo(z2) == 3:
-        z2 = complexinput.ingresar(z2,2)
-        z2 = complexconv.pol_bin(z2[0],z2[1])
+        z2 = complexinput.ingresar(z2,3)
+        z2 = complexconv.exp_bin(z2[0],z2[1])
 
 # ChatGPT me ayudó a usar tuplas, pues no 
     # tenía idea de que tienen indices
