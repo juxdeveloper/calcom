@@ -1,48 +1,37 @@
 import conv
-import cli
+#import cli
 
-def operando_bin(z):
-    tipo_z = cli.tipo(z)
+def operando_bin(tipo, a, b):
+    if tipo == 1:
+        return a,b # falta validar # cli.ingresar() --> binomica(z)
+    elif tipo == 2:
+        return conv.pol_bin(a,b)
+    elif tipo == 3:
+        return conv.exp_bin(a,b)
 
-    if tipo_z == 1:
-        return cli.ingresar(z,1)
-    elif tipo_z == 2:
-        z = cli.ingresar(z,2)
-        return conv.pol_bin(z[0],z[1])
-    elif tipo_z == 3:
-        z = cli.ingresar(z,3)
-        return conv.exp_bin(z[0],z[1])
+def operando_pol(tipo, a,b):
+    if tipo == 2:
+        return a,b
+    elif tipo == 1:
+        return conv.bin_pol(a,b)
+    elif tipo == 3:
+        return conv.exp_pol(a,b)
 
-def operando_pol(z):
-    tipo_z = cli.tipo(z)
+def adicion(tipo1,n1,n2,tipo2,n3,n4,operacion=0):
 
-    if tipo_z == 2:
-        return cli.ingresar(z,2)
-    elif tipo_z == 1:
-        z = cli.ingresar(z,1)
-        return conv.bin_pol(z[0],z[1])
-    elif tipo_z == 3:
-        z = cli.ingresar(z,3)
-        return conv.exp_pol(z[0],z[1])
+    z1 = operando_bin(tipo1, n1, n2)
+    z2 = operando_bin(tipo2, n3, n4)
 
-def adicion(z1,z2,operacion=0):
-
-    z1 = operando_bin(z1)
-    z2 = operando_bin(z2)
-
-    # ChatGPT me ayudó a usar tuplas, pues no 
-    # tenía idea de que tienen indices
-    # sabiendo de su existencia, hice mi propio codigo
     if operacion == 0:
         resultado = (z1[0] + z2[0], z1[1] + z2[1])
     else:
         resultado = (z1[0] - z2[0], z1[1] - z2[1])
     return resultado
 
-def factor(z1,z2,operacion=0):
+def factor(tipo1,n1,n2,tipo2,n3,n4,operacion=0):
 
-    z1 = operando_pol(z1)
-    z2 = operando_pol(z2)
+    z1 = operando_pol(tipo1,n1,n2)
+    z2 = operando_pol(tipo2,n3,n4)
 
     if operacion == 0:
         resultado = (z1[0]*z2[0],(z1[1]+z2[1])%360)
@@ -51,8 +40,8 @@ def factor(z1,z2,operacion=0):
         # fix later : indeteerminacion por 0
     return resultado
 
-def potencia(z,n,operacion=0):
-    z = operando_pol(z)
+def potencia(tipo1,n1,n2,n,operacion=0):
+    z = operando_pol(tipo1,n1,n2)
 
     if operacion == 0:
         return z[0]**n,z[1]*n
