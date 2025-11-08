@@ -1,6 +1,9 @@
 import tkinter as tk
+import conv
 from PIL import Image, ImageTk
 import operations
+import matplotlib.pyplot as plt
+import numpy as np 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #import matplotlib.pyplot as plt
@@ -11,9 +14,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #       Actualiza gráfico
 # 2. Tecla ENTER
 #       Valida entrada
-
 # 3. Selecciona operador
-
 # 4. BOTÓN Pon el primer tipo de número
 #       Muestra tipo
 #       Muestra form
@@ -21,27 +22,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 #       Actualiza gráfico
 # 5. Tecla ENTER
 #       Valida entrada
-
-
 root = tk.Tk()
 root.title('calcom')
-#root.geometry("800x450")
 root.resizable(False, False)
 root.configure(bg='white')
 root.rowconfigure(2, weight=1)
 
-
-
-# {'family': 'Noto Sans', 'size': 10, 'weight': 'normal', 'slant': 'roman', 'underline': 0, 'overstrike': 0}
-
-#default_font_object = font.nametofont("TkDefaultFont")
-#default_font_details = default_font_object.actual()
-#print(default_font_details)
-
-
-###########################################################################
 # FRAME 1
-###########################################################################
 fbotonescalc = tk.Frame(
     root,
     bg="white",
@@ -63,23 +50,15 @@ tk.Button(fbotonescalc,relief="flat", bg="#DBFEEF", text='7', highlightthickness
 tk.Button(fbotonescalc,relief="flat", bg="#DBFEEF", text='8', highlightthickness=0, command=lambda: enter("8")).grid(row=1,column=1, sticky='we')
 tk.Button(fbotonescalc,relief="flat", bg="#DBFEEF", text='9', highlightthickness=0, command=lambda: enter("9")).grid(row=1,column=2, sticky='we')
 
-
-
-####### BOTONES OPERACIONES @@@@@@@@@@@@
-
-
-
-###########################################################################
-# FRAME 2
-###########################################################################
+#BOTONES OPERACIONES
+#FRAME 2
 frame = tk.Frame(
     root,
     bg="white",
     bd=5,
-    relief="solid",   # solid border
-    #highlightbackground="black",  # border color
-    #highlightthickness=0.5
+    relief="solid",  
 )
+
 # Solo la columna 2 se expande. Las demás tienen ancho fijo.
 frame.columnconfigure(2, weight=1)
 frame.grid(row=0, column=0, padx=0, pady=0, columnspan=6, sticky='nwe')
@@ -93,12 +72,7 @@ tk.Label(frame, text='z2', bg="#009F9F").grid(row=1,column=0, sticky='nswe')
 lz2 = tk.Label(frame, text='forma', bg="#FAFEE1")
 lz2.grid(row=1,column=1, sticky='nswe')
 
-
-
-
-
-
-
+#ingresar texto
 def enter(string):
     w = root.focus_get()
     if isinstance(w, tk.Entry):
@@ -117,9 +91,7 @@ def validate(P):
         return P == "" or P == "-" or P == "+"
 vcmd = (frame.register(validate), '%P')
 
-
-
-# INPUT HANDLE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# INPUT HANDLE
 # Frame para Forma Binómica
 _binomicas = tk.Frame(
     frame,
@@ -167,7 +139,6 @@ tk.Label(_exponenciales, text='/', bg="#DBFEEF").grid(row=0, column=3, sticky='n
 entry_exp1_den = tk.Entry(_exponenciales, validate='key', width=3, validatecommand=vcmd, relief="flat", highlightthickness=3, highlightbackground="#DBFEEF")
 entry_exp1_den.grid(row=0, column=4, sticky='we')
 tk.Label(_exponenciales, text='π', bg="#DBFEEF").grid(row=0, column=5, sticky='ns')
-
 
 # --- WIDGETS PARA EL SEGUNDO NÚMERO (z2) ---
 
@@ -219,25 +190,7 @@ entry_exp2_den = tk.Entry(_exponenciales1, validate='key', width=3, validatecomm
 entry_exp2_den.grid(row=0, column=4, sticky='we')
 tk.Label(_exponenciales1, text='π', bg="#DBFEEF").grid(row=0, column=5, sticky='ns')
 
-
-
-
-
-
-
-
-
-
-
-#_exponenciales.grid(row=1,column=2, columnspan=4, sticky='we')
-
-
-
-
-
-###########################################################################
 # FRAME 3
-###########################################################################
 right_frame = tk.Frame(
     root,
     bg="lightblue",
@@ -246,32 +199,25 @@ right_frame = tk.Frame(
 )
 right_frame.grid(row=0, column=6, rowspan=8, sticky='nswe', padx=0, pady=0)
 
-
-
-
-
-# GRÁFICA 1 ==================================================================
-tk.Label(right_frame, text='Operaciones', bg="white", anchor='w').grid(row=0,column=0, sticky='we')
-
-fig = Figure(figsize=(3, 2), dpi=96)
-ax = fig.add_subplot(111) 
-ax.plot([1, 2, 3], [4, 5, 6])
-
-canvas = FigureCanvasTkAgg(fig, master=right_frame)  # 'fig' es nuestro gráfico, 'root' es la ventana
-canvas.get_tk_widget().grid(row=1,column=0, rowspan=2, sticky='we') # grid(row=2,column=6, rowspan=1, sticky="e")
-
-
-
-# GRÁFICA 2 ==================================================================
-tk.Label(right_frame, text='Resultado', bg="white", anchor='w').grid(row=3,column=0, sticky='we')
-
-fig = Figure(figsize=(3, 2), dpi=96)
-ax = fig.add_subplot(111) 
-ax.plot([1, 2, 3], [4, 5, 6])
-
-canvas = FigureCanvasTkAgg(fig, master=right_frame)  # 'fig' es nuestro gráfico, 'root' es la ventana
-canvas.get_tk_widget().grid(row=4,column=0, rowspan=2, sticky='we') # grid(row=2,column=6, rowspan=1, sticky="e")
-
+# GRAFICAR NÚMERO COMPLEJO
+def graficar(grados,r):
+    fig = plt.figure(figsize=(6, 6))
+    ax = fig.add_subplot(111, polar=True)
+    for x in range(3):
+        ax.plot([0, grados], [0, r], color='red', linestyle='-', label='Número Complejo', marker=('*'))
+        texto_coordenadas = f'({r:.1f}, {np.degrees(grados):.0f}°)'
+        ax.annotate(texto_coordenadas, 
+                xy=(grados, r), 
+                xytext=(grados, r + 1),
+                arrowprops=dict(facecolor='black', shrink=0.03, width=0.4),
+                ha='center', va='bottom')
+    ax.set_title("Resulado: Número Complejo", va='bottom')
+    ax.set_xlabel("Parte Real")
+    ax.set_ylabel("Parte Imaginaria")
+    ax.yaxis.set_label_coords(-0.1, 0.5)
+    ax.legend()
+    plt.grid(True)
+    plt.show()
 
 # MENU ==================================================================
 def info_window():
@@ -279,7 +225,7 @@ def info_window():
     new_window.title("Información")
     new_window.geometry("300x450")
 
-    image = Image.open('logo.png').resize((50, 50))
+    image = Image.open('calcom/gui_calculator/logo.png').resize((50, 50))
     photo_image = ImageTk.PhotoImage(image)
     image_label = tk.Label(new_window, image=photo_image)
     image_label.image = photo_image # Para el recolector de basura
@@ -307,25 +253,14 @@ def chtheme():
         fbotonescalc.configure(bg='white')
         stheme = 0
 
-
 theme = tk.Button(root, text='❨', command=lambda: chtheme(), bg="#0A4F6D", fg="white", relief="flat", highlightthickness=0)
 theme.grid(row=0,column=8, sticky='wen')
 close = tk.Button(root, text='⨯', command=root.destroy, bg="#6C100A", fg="white", relief="flat", highlightthickness=0)
 close.grid(row=0,column=9, sticky='wen')
 
-
-
 tipo1 = 0
 tipo2 = 0
 coperacion = 0
-
-
-
-
-
-
-
-
 
 def opera_n(tipo):
     global state
@@ -353,18 +288,10 @@ potencia.grid(row=4,column=4)
 raiz = tk.Button(fbotonescalc, text='n√x',  relief="flat", highlightthickness=0, bg="#84D0FD", fg="black", disabledforeground="gray", state=tk.DISABLED, command=lambda: opera_n(2))
 raiz.grid(row=4,column=5)
 
-
-
-
-
 # FRAME OPERACIONES
 operation_row_frame = tk.Frame(frame, bg="yellow") # Mismo color para que sea invisible
 operation_row_frame.grid(row=5, column=0, columnspan=6, sticky='we')
 operation_row_frame.columnconfigure(3, weight=1)
-
-
-
-
 
 def opera(tipo):
     global state
@@ -397,24 +324,9 @@ multi.grid(row=3,column=4, sticky='we')
 divi = tk.Button(fbotonescalc, text='/', relief="flat", bg="#84D0FD", fg="black", highlightthickness=0, disabledforeground="gray", state=tk.DISABLED, command=lambda: opera(4))
 divi.grid(row=3,column=5, sticky='we')
 
-
-
-
-
-
-
-
-
-
 state = 0
 stateOP = 0
 def corre(tipo, state):
-
-
-    ############
-    ############
-    ############
-
     global stateOP
     if stateOP == 0:
         suma.config(state=tk.NORMAL)
@@ -456,10 +368,6 @@ def corre(tipo, state):
             case 3:
                 lz2.config(text="exp")
                 _exponenciales1.grid(row=1, column=2, sticky='nsew')
-    #binomica.config(state=tk.DISABLED)
-    #polar.config(state=tk.DISABLED)
-    #exponencial.config(state=tk.DISABLED)
-
 
 # 1. Botones para seleccionar el tipo
 
@@ -470,25 +378,10 @@ polar.grid(row=0,column=2, columnspan=2, sticky='we')
 exponencial = tk.Button(fbotonescalc, text='r e^iθπ', command=lambda: corre(3, state), width=5, bg="#0A4F6D", fg="white", relief="flat", highlightthickness=0)
 exponencial.grid(row=0,column=4, columnspan=2, sticky='we')
 
-
-
-
-
 nspin = tk.Spinbox(frame, from_=2, to=20, width=3)
 ntext = tk.Label(frame, text='', bg="#ff9f94", width=4)
 borrar = tk.Button(fbotonescalc, text='⌫', command=lambda: deletee(), bg="#6C100A", fg="white", highlightthickness=0, relief="flat")
 borrar.grid(row=1,column=4, columnspan=2, sticky='we')
-
-
-
-
-
-
-
-
-
-
-
 
 loperacion = tk.Label(operation_row_frame, text='op', width=3, bg="#84D0FD")
 ntext = tk.Label(operation_row_frame, text='', bg="#ff9f94")
@@ -497,10 +390,6 @@ lresultado = tk.Label(operation_row_frame, text='=', anchor='e', bg="#0A4F6D", f
 
 loperacion.grid(row=0, column=0, sticky='we')
 lresultado.grid(row=0, column=1, columnspan=3, sticky='we')
-
-
-
-
 
 def computar(tipo1, tipo2, operacion):
     # --- 1. Obtener valores del primer número (z1) ---
@@ -528,7 +417,6 @@ def computar(tipo1, tipo2, operacion):
         elif tipo2 == 3: # Exponencial
             v3 = float(entry_exp2_mod.get())
             v4 = float(entry_exp2_num.get()) / float(entry_exp2_den.get())
-
     # --- 3. Realizar el cálculo ---
     resultado = ""
     string = ""
@@ -536,15 +424,22 @@ def computar(tipo1, tipo2, operacion):
         case 1: # Suma
             resultado = operations.adicion(tipo1, v1, v2, tipo2, v3, v4, 0)
             string = f"{f'{resultado[0]:.4f}'.rstrip('0').rstrip('.')}{"+" if resultado[1]>=0 else "-"}{f'{abs(resultado[1]):.4f}'.rstrip('0').rstrip('.')}i"
+            ##convertir el resultado de binomica a polar para graficar
+            conv.bin_pol(resultado[0],resultado[1]);
+            graficar(resultado[1],resultado[0]);
         case 2: # Resta
             resultado = operations.adicion(tipo1, v1, v2, tipo2, v3, v4, 1)
             string = f"{f'{resultado[0]:.4f}'.rstrip('0').rstrip('.')}{"+" if resultado[1]>=0 else "-"}{f'{abs(resultado[1]):.4f}'.rstrip('0').rstrip('.')}i"
+            conv.bin_pol(resultado[0],resultado[1]);
+            graficar(resultado[1],resultado[0]);
         case 3: # Multiplicación
             resultado = operations.factor(tipo1, v1, v2, tipo2, v3, v4, 0)
             string = f"{f'{resultado[0]:.4f}'.rstrip('0').rstrip('.')}cis({f'{resultado[1]:.4f}'.rstrip('0').rstrip('.')}°)"
+            graficar(resultado[1],resultado[0]);
         case 4: # División
             resultado = operations.factor(tipo1, v1, v2, tipo2, v3, v4, 1)
             string = f"{f'{resultado[0]:.4f}'.rstrip('0').rstrip('.')}cis({f'{resultado[1]:.4f}'.rstrip('0').rstrip('.')}°)"
+            graficar(resultado[1],resultado[0]);
         case 5: # Potencia
             n = int(nspin.get())
             resultado = operations.potencia(tipo1, v1, v2, n, 0) # Asumo que 'n' es el exponente
@@ -553,12 +448,8 @@ def computar(tipo1, tipo2, operacion):
             n = int(nspin.get())
             resultado = operations.potencia(tipo1, v1, v2, n, 1) # Asumo que 'n' es el índice de la raíz
             string = f"{f'{resultado[0]:.4f}'.rstrip('0').rstrip('.')}cis({f'{resultado[1]:.4f}'.rstrip('0').rstrip('.')}°)"
-
     # --- 4. Mostrar el resultado ---
     lresultado.config(text=f"= {string}")
-
 # 3. Resultado
-
 equal = tk.Button(fbotonescalc, text='=', command=lambda: computar(tipo1,tipo2,coperacion), bg="#0A4F6D",  highlightthickness=0, fg="white", relief="flat").grid(row=4, column=1, columnspan=2, sticky='nswe')
-
 root.mainloop()
