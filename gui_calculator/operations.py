@@ -40,7 +40,7 @@ def factor(tipo1,n1,n2,tipo2,n3,n4,operacion=0):
         # fix later : indeteerminacion por 0
     return resultado
 
-def potencia(tipo1,n1,n2,n,operacion=0):
+def potencia(tipo1,n1,n2,operacion=0):
     z = operando_pol(tipo1,n1,n2)
 
     if operacion == 0:
