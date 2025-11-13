@@ -40,7 +40,7 @@ def factor(tipo1,n1,n2,tipo2,n3,n4,operacion=0):
         # fix later : indeteerminacion por 0
     return resultado
 
-def potencia(tipo1,n1,n2,operacion=0):
+def potencia(tipo1,n1,n2,n,operacion=0):
     z = operando_pol(tipo1,n1,n2)
 
     if operacion == 0:
@@ -57,3 +57,9 @@ def potencia(tipo1,n1,n2,operacion=0):
             soluciones.append((p1,p2))
             k+=1
         return soluciones
+
+def conjugado(tipo1,n1,n2):
+	z = operando_bin(tipo1, n1,n2)
+	a = z[0]
+	b = z[1]
+	return a,b*-1
