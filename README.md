@@ -91,9 +91,11 @@ import operations
 *   `factor(z1, z2, operacion=0)`: Realiza multiplicación o división.
     *   **Return**: `r,g` (forma pol)
 
-*   `potencia(z1, z2, operacion=0)`: Realiza potencia o raíz.
+*   `potencia(z1, n, operacion=0)`: Realiza potencia o raíz.
     *   **Return**: `r,g` (forma pol)
 
+*   `conjugado(z1)`: Realiza potencia o raíz.
+    *   **Return**: `a,b` (forma bin)
 *Formato markdown por Gemini ✨*
 
 *Hecho con 🚀 (ambición) por Joseph*
