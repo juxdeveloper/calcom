@@ -19,6 +19,7 @@ C_CLARO = "#DBD8EA"
 C_NUMEROS = "#CBC5EA"
 C_AC="#73628A"
 C_FLECHITAS = "#DAFF7D"
+C_ERROR="#FFA38B"
 
 #### GENERATED FOR PYINSTALLER ####
 import sys
@@ -65,7 +66,7 @@ root.iconphoto(True, icon_image)
 root.minsize(550, 450)
 root.configure(bg='white')
 # Fuente default
-root.option_add("*Font", ("Red Hat Display", 16, "normal"))
+root.option_add("*Font", ("Microsoft Sans Serif", 16, "normal"))
 
 # --- CONFIGURACIÓN RESPONSIVE DE LA VENTANA PRINCIPAL ---
 root.columnconfigure(0, weight=1)
@@ -332,15 +333,6 @@ raiz.grid(row=3,column=4, sticky='nswe')
 
 # --- LÓGICA DE CÁLCULO Y FUNCIONES AUXILIARES ---
 tipo1 = 0; tipo2 = 0; coperacion = 0
-
-def operando_bin(tipo, v1, v2):
-	if tipo == 1:
-		return v1, v2
-	elif tipo == 2:
-		return conv.pol_bin(v1, v2)
-	elif tipo == 3:
-		rads = v2 * np.pi
-		return conv.pol_bin(v1, math.degrees(rads))
 
 # Ocultar z2 para operaciones unitarias como conjugado, potencia y raíz
 def hide_z2():
@@ -624,9 +616,11 @@ def computar(tipo1, tipo2, operacion):
 
 
 	# Si en la binómica pusieron x/0, se resetea por la indeterminación
-	# es un manejo discreto de error, podría mejorar
 	except ZeroDivisionError:
-		resetear()
+		## HOTFIX: Mostrar al usuario cuando mete algo inválido por división x/0
+		lresultado_bin.configure(text="ERROR", fg=C_ERROR, font=("Microsoft Sans Serif", 16, "normal"))
+		# esperar 3s para resetear
+		root.after(3000, resetear)
 
 
 # En sí es volver todo a su estado inicial
@@ -663,8 +657,47 @@ def resetear():
 	potencia.config(state=tk.DISABLED); raiz.config(state=tk.DISABLED)
 	conjugado.config(state=tk.DISABLED)
 
+## HOTFIX: Vincular la tecla enter para calcular
+root.bind('<Return>', lambda event: computar(tipo1, tipo2, coperacion))
 
+## HOTFIX: Vincular teclas a operaciones
+
+## Manejos especiales para suma y resta, si estoy enfocado en el entry no debe
+## tratarlos como suma o resta, sino como signo ingresado en el entry
+def foco_suma_resta(event, operation_id):
+    focused_widget = root.focus_get()
+    
+    # Si estoy en entry, pon el signo
+    if isinstance(focused_widget, tk.Entry):
+        return
+
+    # Si no, cambia la operación a suma/resta
+    opera(operation_id)
+
+
+# Cambia las operaciones
+root.bind('+', lambda event: foco_suma_resta(event, 1)) # Suma
+root.bind('-', lambda event: foco_suma_resta(event, 2)) # Resta
+root.bind('*', lambda event: opera(3)) # Multiplicación
+root.bind('/', lambda event: opera(4)) # División
+root.bind('^', lambda event: opera_n(1)) # Potencia
+root.bind('r', lambda event: opera_n(2)) # Raíz
+
+# Resetea la calculadora
+root.bind('<Control-BackSpace>', lambda event: resetear())
+
+# Cambia el formato de z1
+root.bind('<Control-KeyPress-1>', lambda event: set_z1_format(1)) # Binomial
+root.bind('<Control-KeyPress-2>', lambda event: set_z1_format(2)) # Polar
+root.bind('<Control-KeyPress-3>', lambda event: set_z1_format(3)) # Exponencial
+
+# Cambia el formato de z2
+root.bind('<Alt-KeyPress-1>', lambda event: set_z2_format(1)) # Binomial
+root.bind('<Alt-KeyPress-2>', lambda event: set_z2_format(2)) # Polar
+root.bind('<Alt-KeyPress-3>', lambda event: set_z2_format(3)) # Exponencial
 
 # Iniciar con la UI de resultados estándar, el "main"
 show_standard_results_ui()
+
+# Función maestra de Tkinter
 root.mainloop()

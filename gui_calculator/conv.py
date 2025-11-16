@@ -16,8 +16,17 @@ def fix_g(g):
 def bin_pol(a,b,tipo=0):
 
     r = math.sqrt(a**2+b**2)
+
+    ## HOTFIX: Si la parte real es 0, asignar el ángulo
+    ## directamente para evitar dividir b/0
+    ## [+] if b ...
     if a == 0:
-        return r,0
+        if b > 0:
+            g = 90
+        elif b < 0:
+            g = 270
+        else: # Origen (0,0)
+            g = 0
 
     g = math.degrees(math.atan(b/a))
     # atan retorna de -90° a 90°
@@ -29,11 +38,7 @@ def bin_pol(a,b,tipo=0):
     elif a > 0 and b < 0: # 4to cuadrante
         g = 360+g
 
-    if tipo == 0:
-        return r,g
-    else:
-        t = (math.radians(g))/math.pi
-        return r,t
+    return r,g
 
 # Polar --> Exponencial
 def pol_exp(r,g):
